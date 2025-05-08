@@ -18,8 +18,13 @@ const ContentAssignment = ({ token }) => {
       }
     }).then(res => setScreens(res.data))
       .catch(err => console.error("Error al cargar pantallas", err));
-    axios.get(`${API_URL}/contents/`).then((res) => setContents(res.data));
-  }, []);
+      axios.get(`${API_URL}/contents/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      }).then(res => setContents(res.data))
+        .catch(err => console.error("Error al cargar contenidos", err));
+    }, [token]);
 
   const assign = async () => {
     try {
@@ -46,8 +51,8 @@ const ContentAssignment = ({ token }) => {
       <select value={selectedScreen} onChange={(e) => setSelectedScreen(e.target.value)}>
         <option value="">Seleccionar pantalla</option>
         {screens.map((s) => (
-          <option key={s.id} value={s.screen_key}>
-            {s.name} ({s.screen_key})
+          <option key={s.id} value={s.id}>
+            {s.name} ({s.id})
           </option>
         ))}
       </select>

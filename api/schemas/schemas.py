@@ -60,7 +60,6 @@ class ScreenOut(BaseModel):
 
 # ---------- PLAYLIST ----------
 class PlaylistBase(BaseModel):
-    screen_id: int
     content_id: int
     start_time: datetime
     end_time: datetime

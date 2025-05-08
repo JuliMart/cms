@@ -26,7 +26,7 @@ const PlaylistViewer = () => {
   }, []);
 
   useEffect(() => {
-    fetchPlaylist(); // Actualiza al cambiar screenKey
+    fetchPlaylist();
   }, [screenKey]);
 
   return (
