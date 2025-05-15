@@ -33,7 +33,10 @@ const ScreenRegister = () => {
   };
   
   return (
+    <section>
+
     <div style={{ marginTop: '2rem' }}>
+      
       <h3>Registrar pantalla</h3>
       <form onSubmit={handleSubmit}>
         <input
@@ -57,9 +60,12 @@ const ScreenRegister = () => {
           required
         />
         <button type="submit">Registrar</button>
+
       </form>
       {message && <p>{message}</p>}
     </div>
+    </section>
+
   );
 };
 

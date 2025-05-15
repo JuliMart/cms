@@ -1,42 +1,197 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
+/* App.css */
+
+:root {
+  --primary: #0066ff;
+  --background: #f4f6f8;
+  --white: #ffffff;
+  --gray: #ccc;
+  --dark: #1a1a1a;
+  --radius: 10px;
+}
+
+body {
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  background-color: var(--background);
+  margin: 0;
+  padding: 0;
+  color: var(--dark);
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
   padding: 2rem;
-  text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+section {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+h1, h2 {
+  margin-bottom: 1rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+input[type="text"],
+input[type="number"],
+select,
+input[type="file"] {
+  padding: 0.6rem 1rem;
+  margin: 0.5rem 0.5rem 0.5rem 0;
+  border: 1px solid var(--gray);
+  border-radius: var(--radius);
+  font-size: 1rem;
 }
 
-.card {
-  padding: 2em;
+button {
+  background-color: var(--primary);
+  color: var(--white);
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.read-the-docs {
+button:hover {
+  background-color: #0044cc;
+}
+
+ul {
+  list-style: none;
+  padding-left: 1rem;
+}
+
+video, img {
+  max-width: 100%;
+  border-radius: var(--radius);
+  margin-top: 1rem;
+}
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.content-card {
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.content-card h3 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.content-card span {
+  font-weight: normal;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.media {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+}
+
+.timestamp {
+  font-size: 0.85rem;
   color: #888;
+  margin-top: 0.5rem;
+}
+
+.card-actions {
+  margin-top: 0.8rem;
+  display: flex;
+  gap: 10px;
+}
+
+.card-actions button {
+  padding: 0.5rem 0.9rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.card-actions button:not(.danger) {
+  background-color: #007bff;
+  color: white;
+}
+
+.card-actions button.danger {
+  background-color: #dc3545;
+  color: white;
+}
+.screen-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.screen-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background-color: white;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.screen-table th,
+.screen-table td {
+  padding: 0.8rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.screen-table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.screen-table tr:hover {
+  background-color: #fafafa;
+}
+
+.screen-table button {
+  margin-right: 0.5rem;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.screen-table .danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.screen-table button:not(.danger) {
+  background-color: #007bff;
+  color: white;
+}
+.playlist-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.playlist-table th,
+.playlist-table td {
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
 }

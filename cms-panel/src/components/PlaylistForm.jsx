@@ -35,6 +35,7 @@ const PlaylistForm = () => {
   };
 
   return (
+    <section>
     <div style={{ marginTop: '2rem' }}>
       <h3>Asignar contenido a pantalla</h3>
       <form onSubmit={handleSubmit}>
@@ -63,6 +64,7 @@ const PlaylistForm = () => {
       </form>
       {message && <p>{message}</p>}
     </div>
+   </section>
   );
 };
 

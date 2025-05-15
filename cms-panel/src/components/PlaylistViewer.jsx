@@ -22,14 +22,26 @@ const PlaylistViewer = () => {
   };
 
   useEffect(() => {
-    axios.get(`${API_URL}/screens/`).then(res => setScreens(res.data));
+    const token = localStorage.getItem("token");
+    axios.get(`${API_URL}/screens/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    .then(res => setScreens(res.data))
+    .catch(err => {
+      console.error("Error al cargar pantallas:", err);
+      setScreens([]);
+    });
   }, []);
+  
 
   useEffect(() => {
     fetchPlaylist();
   }, [screenKey]);
 
   return (
+  
     <div style={{ marginTop: '2rem' }}>
       <h3>Ver playlist por pantalla</h3>
 

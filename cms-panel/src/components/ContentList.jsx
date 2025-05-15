@@ -1,52 +1,85 @@
 import React, { useEffect, useState } from 'react';
 import { getContents } from '../api/api';
+import axios from 'axios';
+
+const API_URL = 'http://localhost:8000';
 
 const ContentList = () => {
   const [contents, setContents] = useState([]);
 
-  useEffect(() => {
-    const fetchContents = async () => {
-      try {
-        const data = await getContents();
-        setContents(data);
-      } catch (error) {
-        console.error('Error al cargar contenidos:', error);
-      }
-    };
+  const fetchContents = async () => {
+    try {
+      const data = await getContents();
+      setContents(data);
+    } catch (error) {
+      console.error('Error al cargar contenidos:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchContents();
   }, []);
 
+  const handleEdit = async (item) => {
+    const newName = prompt('Editar nombre del contenido:', item.name);
+    if (newName && newName !== item.name) {
+      try {
+        await axios.put(`${API_URL}/content/${item.id}`, { name: newName });
+        fetchContents();
+      } catch (err) {
+        console.error('Error al editar contenido:', err);
+      }
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm('¿Estás seguro de eliminar este contenido?')) {
+      try {
+        await axios.delete(`${API_URL}/content/${id}`);
+        fetchContents();
+      } catch (err) {
+        console.error('Error al eliminar contenido:', err);
+      }
+    }
+  };
+
   return (
-    <div>
-      <h3>Contenidos cargados</h3>
+    <section>
+      <h2>Contenidos cargados</h2>
       {contents.length === 0 ? (
         <p>No hay contenidos aún.</p>
       ) : (
-        <ul style={{ listStyle: 'none', padding: 0 }}>
+        <div className="content-grid">
           {contents.map((content) => (
-            <li key={content.id} style={{ marginBottom: '1rem' }}>
-              <strong>{content.name}</strong> ({content.type}) <br />
-              {content.type === 'image' && (
+            <div className="content-card" key={content.id}>
+              <h3>{content.name} <span>({content.type})</span></h3>
+
+              {content.type === 'image' ? (
                 <img
-                  src={`http://localhost:8000${content.url}`}
+                  src={`${API_URL}${content.url}`}
                   alt={content.name}
-                  width="200"
+                  className="media"
                 />
-              )}
-              {content.type === 'video' && (
-                <video width="300" controls>
-                  <source src={`http://localhost:8000${content.url}`} type="video/mp4" />
+              ) : (
+                <video className="media" controls>
+                  <source src={`${API_URL}${content.url}`} type="video/mp4" />
                   Tu navegador no soporta video HTML5.
                 </video>
               )}
-              <br />
-              <small>{new Date(content.created_at).toLocaleString()}</small>
-            </li>
+
+              <p className="timestamp">
+                {new Date(content.created_at).toLocaleString()}
+              </p>
+
+              <div className="card-actions">
+                <button onClick={() => handleEdit(content)}>Editar</button>
+                <button className="danger" onClick={() => handleDelete(content.id)}>Eliminar</button>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
-    </div>
+    </section>
   );
 };
 

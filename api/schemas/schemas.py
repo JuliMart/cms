@@ -60,6 +60,7 @@ class ScreenOut(BaseModel):
 
 # ---------- PLAYLIST ----------
 class PlaylistBase(BaseModel):
+    screen_id: int
     content_id: int
     start_time: datetime
     end_time: datetime
@@ -72,6 +73,4 @@ class PlaylistOut(PlaylistBase):
     id: int
     content: ContentOut
 
-model_config = {
-    "from_attributes": True
-}
+    model_config = ConfigDict(from_attributes=True)

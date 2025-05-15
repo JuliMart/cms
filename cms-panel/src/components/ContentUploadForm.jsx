@@ -12,10 +12,10 @@ const ContentUploadForm = ({ token }) => {
     if (!file) return setMessage('Selecciona un archivo');
 
     const formData = new FormData();
-    formData.append('name', name);
-    formData.append('type', type);
+    formData.append('name', contentName);
+    formData.append('type', contentType);
     formData.append('uploaded_by', 1); // ID fijo para demo
-    formData.append('file', file);
+    formData.append('file', selectedFile);
 
     try {
       await uploadContent(formData, token);
@@ -27,6 +27,8 @@ const ContentUploadForm = ({ token }) => {
   };
 
   return (
+  <section>
+
     <form onSubmit={handleSubmit}>
       <h3>Subir contenido</h3>
       <input
@@ -45,6 +47,8 @@ const ContentUploadForm = ({ token }) => {
       <button type="submit">Subir</button>
       {message && <p>{message}</p>}
     </form>
+    </section>
+
   );
 };
 

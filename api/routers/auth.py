@@ -5,6 +5,7 @@ from database.database import SessionLocal
 from schemas import schemas
 from models import models
 from utils.security import verify_password, hash_password, create_access_token
+from fastapi.security import OAuth2PasswordBearer
 
 router = APIRouter()
 
@@ -39,3 +40,29 @@ def login(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
     token = create_access_token({"sub": db_user.email})
     return {"access_token": token, "token_type": "bearer"}
+
+# 👉 esto debe coincidir con el tokenUrl usado por tu frontend
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+
+# Clave secreta y algoritmo (ajustá según lo definido en `utils/security.py`)
+SECRET_KEY = "tu_clave_secreta"  # debe coincidir con tu create_access_token()
+ALGORITHM = "HS256"
+
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    credentials_exception = HTTPException(
+        status_code=401,
+        detail="No se pudo validar las credenciales",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+
+    user = db.query(models.User).filter(models.User.email == email).first()
+    if user is None:
+        raise credentials_exception
+    return user

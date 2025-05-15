@@ -6,6 +6,7 @@ from models import models
 from schemas import schemas
 from datetime import datetime
 from utils.security import get_current_user
+from schemas.schemas import PlaylistCreate
 
 
 router = APIRouter()
@@ -61,3 +62,65 @@ from utils.security import get_current_user
 def get_user_screens(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     screens = db.query(models.Screen).filter(models.Screen.owner_id == current_user.id).all()
     return screens
+
+@router.post("/{screen_id}/playlist", response_model=schemas.PlaylistOut)
+def asignar_contenido(screen_id: int, data: PlaylistCreate, db: Session = Depends(get_db)):
+    # Validar existencia de pantalla y contenido
+    screen = db.query(models.Screen).filter_by(id=screen_id).first()
+    content = db.query(models.Content).filter_by(id=data.content_id).first()
+    if not screen or not content:
+        raise HTTPException(status_code=404, detail="Pantalla o contenido no encontrado")
+
+    item = models.Playlist(
+        screen_id=screen.id,
+        content_id=data.content_id,
+        start_time=data.start_time,
+        end_time=data.end_time,
+        order_index=data.order_index
+    )
+    db.add(item)
+    db.commit()
+    db.refresh(item)
+    return item
+@router.get("/screens")
+def get_user_screens(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    return db.query(models.Screen).filter_by(owner_id=current_user.id).all()
+@router.put("/screens/{screen_id}")
+def update_screen(
+    screen_id: int,
+    payload: dict,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    screen = db.query(models.Screen).filter(
+        models.Screen.id == screen_id,
+        models.Screen.owner_id == current_user.id
+    ).first()
+
+    if not screen:
+        raise HTTPException(status_code=404, detail="Pantalla no encontrada")
+
+    screen.name = payload.get("name", screen.name)
+    screen.location = payload.get("location", screen.location)
+    db.commit()
+    return {"message": "Pantalla actualizada"}
+@router.delete("/screens/{screen_id}")
+def delete_screen(
+    screen_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    screen = db.query(models.Screen).filter(
+        models.Screen.id == screen_id,
+        models.Screen.owner_id == current_user.id
+    ).first()
+
+    if not screen:
+        raise HTTPException(status_code=404, detail="Pantalla no encontrada")
+
+    db.delete(screen)
+    db.commit()
+    return {"message": "Pantalla eliminada"}

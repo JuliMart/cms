@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+
 const API_URL = "http://localhost:8000";
 
 const ContentAssignment = ({ token }) => {
@@ -18,7 +19,7 @@ const ContentAssignment = ({ token }) => {
       }
     }).then(res => setScreens(res.data))
       .catch(err => console.error("Error al cargar pantallas", err));
-      axios.get(`${API_URL}/contents/`, {
+      axios.get(`${API_URL}/content/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         }
@@ -28,16 +29,20 @@ const ContentAssignment = ({ token }) => {
 
   const assign = async () => {
     try {
-      await axios.post(
-        `${API_URL}/screens/${selectedScreen}/playlist`,
-        {
-          content_id: parseInt(selectedContent),
-          order_index: parseInt(orderIndex),
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
+      await axios.post(`${API_URL}/screens/${selectedScreen}/playlist`, {
+        content_id: parseInt(selectedContent),
+        start_time: new Date().toISOString(), // o elegí una hora
+        end_time: new Date(Date.now() + 3600000).toISOString(), // 1 hora después
+        order_index: parseInt(orderIndex),
+        screen_id: parseInt(selectedScreen)  // 👈 Asegurate de incluir esto también
+
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-      );
+      });
+      
+      
       alert("Contenido asignado");
     } catch (err) {
       console.error(err);
@@ -46,6 +51,8 @@ const ContentAssignment = ({ token }) => {
   };
 
   return (
+  <section>
+
     <div>
       <h3>Asignar contenido a pantalla</h3>
       <select value={selectedScreen} onChange={(e) => setSelectedScreen(e.target.value)}>
@@ -72,6 +79,8 @@ const ContentAssignment = ({ token }) => {
       />
       <button onClick={assign}>Asignar</button>
     </div>
+    </section>
+
   );
 };
 

@@ -7,6 +7,7 @@ import ContentAssignment from './components/ContentAssignment';
 import PlaylistViewer from './components/PlaylistViewer';
 import { jwtDecode } from "jwt-decode";
 import ScreenList from "./components/ScreenList";
+import './App.css';
 
 
 function App() {
@@ -25,13 +26,13 @@ function App() {
   }
 
   return (
-    <div>
+    <div className= "container">
       <h1>Panel CMS</h1>
       <p>Sesión iniciada como: <strong>{userEmail}</strong></p>
       <ScreenRegister token={token} />
       <ContentAssignment token={token} />
       <ScreenList token={token} />
-
+      
       <PlaylistViewer />
       <ContentUploadForm token={token} />
       <ContentList />
@@ -43,6 +44,7 @@ function App() {
       >
         Cerrar sesión
       </button>
+      
     </div>
   );
 }

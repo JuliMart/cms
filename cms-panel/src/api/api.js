@@ -8,7 +8,7 @@ export const login = async (email, password) => {
 };
 
 export const uploadContent = async (formData, token) => {
-  const response = await axios.post(`${API_URL}/contents/`, formData, {
+  const response = await axios.post(`${API_URL}/content/`, formData, {
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'multipart/form-data',
@@ -18,6 +18,8 @@ export const uploadContent = async (formData, token) => {
 };
 
 export const getContents = async () => {
-  const response = await axios.get(`${API_URL}/contents/`);
+  const response = await axios.get(`${API_URL}/content/`);
   return response.data;
 };
+export const updateContent = (id, data) => axios.put(`${API_URL}/content/content/${id}`, data);
+export const deleteContent = (id) => axios.delete(`${API_URL}/content/content/${id}`);
