@@ -7,6 +7,7 @@ from schemas import schemas
 from datetime import datetime
 from utils.security import get_current_user
 from schemas.schemas import PlaylistCreate
+from database.database import get_db
 
 
 router = APIRouter()
@@ -88,7 +89,7 @@ def get_user_screens(
     current_user: models.User = Depends(get_current_user)
 ):
     return db.query(models.Screen).filter_by(owner_id=current_user.id).all()
-@router.put("/screens/{screen_id}")
+@router.put("/{screen_id}")
 def update_screen(
     screen_id: int,
     payload: dict,
@@ -107,7 +108,7 @@ def update_screen(
     screen.location = payload.get("location", screen.location)
     db.commit()
     return {"message": "Pantalla actualizada"}
-@router.delete("/screens/{screen_id}")
+@router.delete("/{screen_id}")
 def delete_screen(
     screen_id: int,
     db: Session = Depends(get_db),

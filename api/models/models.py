@@ -10,8 +10,9 @@ class User(Base):
     hashed_password = Column(String)
     role = Column(String, default="admin")
 
-    # ✅ RELACIÓN CORRECTA: un usuario puede tener varias pantallas
+    # ✅ Un usuario puede tener muchas pantallas y muchos contenidos
     screens = relationship("Screen", back_populates="owner")
+    contents = relationship("Content", back_populates="uploader")  # 👈 agregado
 
 class Screen(Base):
     __tablename__ = "screens"
@@ -24,14 +25,12 @@ class Screen(Base):
     status = Column(String, default="offline")
     last_seen = Column(DateTime, default=datetime.utcnow)
 
-    playlists = relationship("Playlist", back_populates="screen")
     owner_id = Column(Integer, ForeignKey("users.id"))
+    screen_key = Column(String, unique=True, index=True)
 
-    screen_key = Column(String, unique=True, index=True)  # 👈 Este campo debe existir
-
-
-    # ✅ RELACIÓN CON USUARIO DUEÑO
+    # Relaciones
     owner = relationship("User", back_populates="screens")
+    playlists = relationship("Playlist", back_populates="screen")
 
 class Content(Base):
     __tablename__ = "contents"
@@ -42,8 +41,8 @@ class Content(Base):
     uploaded_by = Column(Integer, ForeignKey("users.id"))
     created_at = Column(DateTime, default=datetime.utcnow)
 
-    # ❌ Línea eliminada: no tiene sentido relacionar content con Screen así
-    # screens = relationship("Screen", back_populates="owner")
+    # ✅ Asociación al usuario que lo subió
+    uploader = relationship("User", back_populates="contents")
 
 class Playlist(Base):
     __tablename__ = "playlists"

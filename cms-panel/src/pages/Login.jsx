@@ -1,32 +1,31 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { login } from "../api/api";
 
-const Login = ({ onLogin }) => {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate(); // Para redirigir
 
-  // Si ya hay token guardado, lo usamos
   useEffect(() => {
     const savedToken = localStorage.getItem("token");
     if (savedToken) {
-      onLogin(savedToken);
+      navigate("/dashboard");
     }
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     try {
       const data = await login(email, password);
-      console.log("Login success", data); // 👈 agregá esto
-      onLogin(data.access_token);
+      console.log("Login success", data);
       localStorage.setItem("token", data.access_token);
+      navigate("/dashboard");
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
       alert("Credenciales inválidas");
     }
   };
-  
 
   return (
     <div>
@@ -46,6 +45,9 @@ const Login = ({ onLogin }) => {
         /><br />
         <button type="submit">Ingresar</button>
       </form>
+      <button onClick={() => navigate("/register")}>
+        Crear nuevo usuario
+      </button>
     </div>
   );
 };

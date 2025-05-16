@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from database.database import SessionLocal
 from models import models
 from schemas import schemas
+from database.database import get_db
 
 UPLOAD_FOLDER = "static/uploads"
 ALLOWED_EXT = (".png", ".jpg", ".jpeg", ".mp4")

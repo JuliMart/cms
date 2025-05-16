@@ -1,4 +1,3 @@
-# schemas/schemas.py
 from pydantic import BaseModel, ConfigDict
 from typing import Optional, List
 from datetime import datetime
@@ -14,7 +13,7 @@ class UserOut(UserBase):
     id: int
     role: str
 
-model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True)
 
 # ---------- CONTENT ----------
 class ContentBase(BaseModel):
@@ -29,8 +28,7 @@ class ContentOut(ContentBase):
     id: int
     created_at: datetime
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 # ---------- SCREEN ----------
 class ScreenBase(BaseModel):
@@ -38,11 +36,10 @@ class ScreenBase(BaseModel):
     location: str
 
 class ScreenCreate(ScreenBase):
-    screen_key: str  # 👈 Asegurate de incluir este campo si lo estás usando
+    screen_key: str
     resolution_width: Optional[int] = 1920
     resolution_height: Optional[int] = 1080
     layout_type: Optional[str] = "full"
-
 
 class ScreenOut(BaseModel):
     id: int
@@ -55,8 +52,7 @@ class ScreenOut(BaseModel):
     status: str
     last_seen: datetime
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 # ---------- PLAYLIST ----------
 class PlaylistBase(BaseModel):

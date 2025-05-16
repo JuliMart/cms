@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from database.database import get_db
 import models
 from schemas.schemas import PlaylistOut, PlaylistCreate
+from database.database import get_db
 
 router = APIRouter()
 

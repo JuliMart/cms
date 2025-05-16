@@ -6,16 +6,11 @@ from schemas import schemas
 from models import models
 from utils.security import verify_password, hash_password, create_access_token
 from fastapi.security import OAuth2PasswordBearer
+from database.database import get_db
 
 router = APIRouter()
 
-# Dependencia de sesión de base de datos
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+
 
 # Registro rápido (opcional para demo)
 @router.post("/register", response_model=schemas.UserOut)
