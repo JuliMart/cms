@@ -17,9 +17,13 @@ export const uploadContent = async (formData, token) => {
   return response.data;
 };
 
-export const getContents = async () => {
-  const response = await axios.get(`${API_URL}/content/`);
-  return response.data;
+export const getContents = async (token) => {
+  const res = await axios.get(`${API_URL}/content/`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
 };
 export const updateContent = (id, data) => axios.put(`${API_URL}/content/content/${id}`, data);
 export const deleteContent = (id) => axios.delete(`${API_URL}/content/content/${id}`);

@@ -40,7 +40,7 @@ function App() {
       <ContentAssignment token={token} />
       <PlaylistViewer />
       <ContentUploadForm token={token} />
-      <ContentList />
+      <ContentList token={token}/>
       <button onClick={handleLogout}>Cerrar sesión</button>
     </div>
   );

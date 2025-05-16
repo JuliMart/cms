@@ -7,6 +7,7 @@ class UserBase(BaseModel):
     email: str
 
 class UserCreate(UserBase):
+    email: str
     password: str
 
 class UserOut(UserBase):
@@ -35,11 +36,21 @@ class ScreenBase(BaseModel):
     name: str
     location: str
 
-class ScreenCreate(ScreenBase):
+class ScreenCreate(BaseModel):
+    name: str
+    location: str
     screen_key: str
-    resolution_width: Optional[int] = 1920
-    resolution_height: Optional[int] = 1080
-    layout_type: Optional[str] = "full"
+    resolution_width: int = 1920
+    resolution_height: int = 1080
+    layout_type: str = "full"
+
+    # 🔽 Nuevos campos
+    alias: Optional[str] = None
+    address: Optional[str] = None
+    orientation: Optional[str] = "horizontal"
+    device_type: Optional[str] = None
+    group: Optional[str] = None
+    notes: Optional[str] = None
 
 class ScreenOut(BaseModel):
     id: int

@@ -24,10 +24,17 @@ class Screen(Base):
     layout_type = Column(String, default="full")
     status = Column(String, default="offline")
     last_seen = Column(DateTime, default=datetime.utcnow)
-
-    owner_id = Column(Integer, ForeignKey("users.id"))
     screen_key = Column(String, unique=True, index=True)
 
+    # 🔽 Nuevos campos
+    alias = Column(String, nullable=True)
+    address = Column(String, nullable=True)
+    orientation = Column(String, default="horizontal")
+    device_type = Column(String, nullable=True)
+    group = Column(String, nullable=True)
+    notes = Column(Text, nullable=True)
+
+    owner_id = Column(Integer, ForeignKey("users.id"))
     # Relaciones
     owner = relationship("User", back_populates="screens")
     playlists = relationship("Playlist", back_populates="screen")

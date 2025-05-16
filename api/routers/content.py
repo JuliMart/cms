@@ -11,6 +11,7 @@ from database.database import SessionLocal
 from models import models
 from schemas import schemas
 from database.database import get_db
+from utils.security import get_current_user
 
 UPLOAD_FOLDER = "static/uploads"
 ALLOWED_EXT = (".png", ".jpg", ".jpeg", ".mp4")
@@ -30,10 +31,11 @@ def get_db():
 def upload_content(
     name: str = Form(...),
     type: str = Form(...),
-    uploaded_by: int = Form(1),
+    current_user: models.User = Depends(get_current_user),  # 👈 esta coma es clave
     file: UploadFile = File(...),
     db: Session = Depends(get_db)
 ):
+
     # ——— Validación de extensión antes de guardar ———
     if not file.filename.lower().endswith(ALLOWED_EXT):
         raise HTTPException(status_code=400, detail="Solo PNG/JPG/MP4 permitidos")
@@ -56,7 +58,7 @@ def upload_content(
         name=name,
         type=type,
         url=url,
-        uploaded_by=uploaded_by,
+        uploaded_by=current_user.id,
         created_at=datetime.utcnow()
     )
     db.add(new_content)
@@ -66,8 +68,11 @@ def upload_content(
 
 # 2) LISTAR CONTENIDOS
 @router.get("/", response_model=list[schemas.ContentOut])
-def get_contents(db: Session = Depends(get_db)):
-    return db.query(models.Content).all()
+def get_contents(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    return db.query(models.Content).filter(models.Content.uploaded_by == current_user.id).all()
 
 # 3) EDITAR NOMBRE (PUT /content/{id})
 @router.put("/{content_id}")

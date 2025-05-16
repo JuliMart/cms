@@ -37,7 +37,13 @@ def register_screen(
         layout_type=screen.layout_type,
         status="online",
         last_seen=datetime.utcnow(),
-        owner_id=current_user.id  # 👈 clave: se asocia a este usuario
+        owner_id=current_user.id,
+        alias=screen.alias,
+        address=screen.address,
+        orientation=screen.orientation,
+        device_type=screen.device_type,
+        group=screen.group,
+        notes=screen.notes
     )
     db.add(new_screen)
     db.commit()

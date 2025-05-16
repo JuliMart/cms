@@ -4,12 +4,12 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:8000';
 
-const ContentList = () => {
+const ContentList = ({ token }) => {
   const [contents, setContents] = useState([]);
 
   const fetchContents = async () => {
     try {
-      const data = await getContents();
+      const data = await getContents(token);
       setContents(data);
     } catch (error) {
       console.error('Error al cargar contenidos:', error);
@@ -17,14 +17,20 @@ const ContentList = () => {
   };
 
   useEffect(() => {
-    fetchContents();
-  }, []);
+    if (token) fetchContents();
+  }, [token]);
+
+
 
   const handleEdit = async (item) => {
     const newName = prompt('Editar nombre del contenido:', item.name);
     if (newName && newName !== item.name) {
       try {
-        await axios.put(`${API_URL}/content/${item.id}`, { name: newName });
+        await axios.put(`${API_URL}/content/${item.id}`, { name: newName },          {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         fetchContents();
       } catch (err) {
         console.error('Error al editar contenido:', err);
